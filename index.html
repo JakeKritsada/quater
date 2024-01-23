@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown Timer</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('https://wallpapercave.com/wp/xSecKqL.jpg'); /* เปลี่ยนสีพื้นหลังเป็นรูปภาพ */
+      background-size: cover; /* ปรับขนาดพื้นหลังให้เต็มหน้าจอ */
+      transition: background-color 0.5s ease; /* เพิ่ม transition สำหรับการเปลี่ยนสีพื้นหลัง */
+    }
+
+    .outer-frame {
+      border: 2px solid #555;
+      padding: 10px;
+      border-radius: 15px;
+      background-color: #cccccc; /* สีเทาที่เข้มกว่า */
+    }
+
+    .countdown {
+      text-align: center;
+      border: 2px solid #333;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f4f4f4;
+    }
+
+    #timerText {
+      font-size: 1.5em;
+      color: #555;
+    }
+
+    #timer {
+      font-size: 2em;
+      margin: 10px 0;
+    }
+
+    #startButton, #restartButton {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      margin: 5px;
+      transition: box-shadow 0.3s ease; /* เพิ่ม transition สำหรับการเปลี่ยนสีของปุ่ม */
+    }
+
+    #startButton:hover, #restartButton:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* เพิ่มเทียบเท่าสีกับพื้นหลังเมื่อ hover */
+    }
+
+    #startButton:active, #restartButton:active {
+      background-color: lightblue; /* สีน้ำเงินอ่อน */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* เพิ่มเทียบเท่าสีกับพื้นหลังเมื่อกด */
+    }
+  </style>
+</head>
+<body>
+
+<div class="outer-frame">
+  <div class="countdown">
+    <div id="timerText">เวลาต่อหนึ่ง quarter</div>
+    <div id="timer">10:00</div>
+    <button id="startButton" onmousedown="changeButtonColor(true)" onmouseup="changeButtonColor(false)" onclick="startCountdown()">Start</button>
+    <button id="restartButton" onclick="restartCountdown()">Restart</button>
+  </div>
+</div>
+
+<script>
+  let countdown;
+  let timeRemaining;
+
+  function startCountdown() {
+    const timerDisplay = document.getElementById('timer');
+    const startButton = document.getElementById('startButton');
+    const restartButton = document.getElementById('restartButton');
+
+    // Disable the start button and enable the restart button
+    startButton.disabled = true;
+    restartButton.disabled = false;
+
+    // Set the initial time (10 minutes)
+    timeRemaining = 600;
+
+    countdown = setInterval(function () {
+      const minutes = Math.floor(timeRemaining / 60);
+      let seconds = timeRemaining % 60;
+
+      // Add leading zero if seconds < 10
+      seconds = seconds < 10 ? '0' + seconds : seconds;
+
+      // Display the time
+      timerDisplay.textContent = `${minutes}:${seconds}`;
+
+      // Check if time has run out
+      if (timeRemaining === 0) {
+        clearInterval(countdown);
+        timerDisplay.textContent = 'Time\'s up!';
+        startButton.disabled = false; // Enable the start button for a new countdown
+        restartButton.disabled = true; // Disable the restart button
+      } else {
+        // Decrease time remaining
+        timeRemaining--;
+      }
+    }, 1000); // Update every second
+
+    // Change background color when Start button is pressed
+    document.body.style.backgroundColor = 'lightblue';
+  }
+
+  function restartCountdown() {
+    clearInterval(countdown);
+    const timerDisplay = document.getElementById('timer');
+    const startButton = document.getElementById('startButton');
+    const restartButton = document.getElementById('restartButton');
+
+    // Reset the display
+    timerDisplay.textContent = '10:00';
+
+    // Enable the start button and disable the restart button
+    startButton.disabled = false;
+    restartButton.disabled = true;
+
+    // Reset background color when Restart button is pressed
+    document.body.style.backgroundColor = '#e0e0e0';
+  }
+
+  function changeButtonColor(isMouseDown) {
+    const startButton = document.getElementById('startButton');
+    const restartButton = document.getElementById('restartButton');
+    
+    if (isMouseDown) {
+      // Change button color when mouse is down
+      startButton.style.backgroundColor = 'lightblue';
+      restartButton.style.backgroundColor = 'lightblue';
+    } else {
+      // Reset button color when mouse is released
+      startButton.style.backgroundColor = '';
+      restartButton.style.backgroundColor = '';
+    }
+  }
+</script>
+
+</body>
+</html>
